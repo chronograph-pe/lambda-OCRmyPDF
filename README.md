@@ -1,4 +1,5 @@
-[CG-Logo]
+![chronograph-logo-no-icon-normal](https://user-images.githubusercontent.com/16158417/62494113-b45aa300-b7a0-11e9-964b-e657d377f444.png)
+
 
 # lambda-OCRmyPDF
 
