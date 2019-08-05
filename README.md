@@ -1,3 +1,6 @@
+![chronograph-logo-no-icon-normal](https://user-images.githubusercontent.com/16158417/62494113-b45aa300-b7a0-11e9-964b-e657d377f444.png)
+
+
 # lambda-OCRmyPDF
 
 Adapting the python library [OCRmyPDF](https://github.com/jbarlow83/OCRmyPDF/) to run as an AWS Lambda Function.
@@ -6,7 +9,25 @@ From the OCRmyPDF readme:
 
 > OCRmyPDF adds an OCR text layer to scanned PDF files, allowing them to be searched or copy-pasted.
 
-## Current Support
+## Purpose
+
+The purpose of this application was to adapt the **OCRmyPDF** application/library to be run on AWS servers to serve as a dynamic document OCR processing service.  We loved the implementation of OCRmyPDF but felt it would work well if adapted to an Amazon Lambda Function.
+
+## What's in the repo?
+
+This repository contains all external libraries required by OCRmyPDF compiled on and extracted from an Amazon Linux EC2 instance.  It also contains all python packages compiled on and extracted from an Amazon Linux EC2 instance.  Lastly, it features some minor changes to the OCRmyPDF source itself to make it Lambda friendly.
+
+## Calling the Event
+
+The event currently supports only a few, basic, parameters, which we intend on expanding.  The parameters are:
+
+| Key | Description|
+|---------|----------|
+| awsRegion | The region where the S3 bucket is located |
+| s3.bucket.name | The name of the S3 bucket |
+| s3.object.key | The key for the object in the S3 bucket |
+| pages | The pages parameter for OCRmyPDF.  Ex: "1,3-5,8" |
+
 
 ## Installation
 ### Download Latest Release
@@ -56,6 +77,7 @@ The following test configuration can be added to lambda to test the functionalit
 ```
 
 # To Do:
+- Make backup creation configurable in the lambda action
 - Add instructions for `aws-cli`
 - Add additional language support
 - Continue to trim down python packages
