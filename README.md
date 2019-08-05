@@ -36,7 +36,7 @@ Download the [latest release](https://github.com/chronograph-pe/lambda-OCRmyPDF/
 
 ### Create the Function
 
-- Go to S3 and upload the downloaded zip file to an S3 bucket of your choosing.  Copy and paste the url of the file for later.
+- Go to S3 and upload the downloaded zip file to an S3 bucket of your choosing.  Keep track of the url of the file for later.
 - Access the AWS Lambda dashboard and click on Create Function.
 - Ensure `Author from scratch` is selected
 - Name your function as you please.
