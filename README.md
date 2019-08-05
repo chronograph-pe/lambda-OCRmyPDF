@@ -43,7 +43,7 @@ Download the [latest release](https://github.com/chronograph-pe/lambda-OCRmyPDF/
 - Make sure that your Runtime is set to `Python 3.6`
 - If you do not have an IAM Role set up for S3 access, set one up with Read, Write access on S3.  I used AWS's `AWSLambdaExecute` policy as a base.
 
-## Setup the Function
+### Setup the Function
 
 - Under the Function code section:
     - Set the **Code entry type** field to `Upload a file from Amazon S3`
@@ -56,7 +56,7 @@ Download the [latest release](https://github.com/chronograph-pe/lambda-OCRmyPDF/
     - **PYTHONPATH** : `/var/task/python`
     - **TESSDATA_PREFIX** : `/var/task/tessdata`
 
-## Test the Function
+### Test the Function
 
 The following test configuration can be added to lambda to test the functionality.  Upload any pdf called `input.pdf` to an S3 bucket and run this test configuration:
 
