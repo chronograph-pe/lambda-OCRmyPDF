@@ -15,7 +15,7 @@ The purpose of this application was to adapt the **OCRmyPDF** application/librar
 
 ## What's in the repo?
 
-This repository contains all external libraries required by OCRmyPDF compiled on and extracted from an Amazon Linux EC2 instance.  It also contains all python packages compiled on and extracted from an Amazon Linux EC2 instance.  Lastly, it features some minor changes to the OCRmyPDF source itself to make it Lambda friendly.
+This repository contains all external libraries required by OCRmyPDF compiled on and extracted from an Amazon Linux EC2 instance.  It also contains all python packages compiled on and extracted from an Amazon Linux EC2 instance.  Lastly, it features some minor changes to the OCRmyPDF source itself to make it Lambda friendly.  The resulting zip file is around `261,459,415` bytes
 
 ## Calling the Event
 
@@ -26,7 +26,7 @@ The event currently supports only a few, basic, parameters, which we intend on e
 | awsRegion | The region where the S3 bucket is located |
 | s3.bucket.name | The name of the S3 bucket |
 | s3.object.key | The key for the object in the S3 bucket |
-| pages | The pages parameter for OCRmyPDF.  Ex: "1,3-5,8" |
+| pages | The pages parameter for OCRmyPDF.  Ex: "1", "3-5", "1,3-5,8" |
 
 
 ## Installation
