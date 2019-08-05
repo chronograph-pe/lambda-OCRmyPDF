@@ -1,0 +1,14 @@
+../../../bin/img2pdf,sha256=gFt9iqDeKSnJaMA95TUqmam76xBaMg9uZBKJAwdyriQ,230
+__pycache__/img2pdf.cpython-36.pyc,,
+__pycache__/jp2.cpython-36.pyc,,
+img2pdf-0.3.3.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+img2pdf-0.3.3.dist-info/LICENSE,sha256=46mU2C5kSwOnkqkw9XQAJlhBL2JAf1_uCD8lVcXyMRg,7652
+img2pdf-0.3.3.dist-info/METADATA,sha256=_PQ_7vHKbB55XP2s80XaLuoKDf4ubuTTF-thLlEnQ0c,9206
+img2pdf-0.3.3.dist-info/RECORD,,
+img2pdf-0.3.3.dist-info/WHEEL,sha256=PniU-aBnAY4-Bj225WTdZtc03RI6OIFUB_4k7Rq4Zkw,93
+img2pdf-0.3.3.dist-info/entry_points.txt,sha256=ABZh4NYAFpVSmD7bDgiU7yCHmWsD0NgUKZoZB6yEDsI,54
+img2pdf-0.3.3.dist-info/pbr.json,sha256=TK0H6j9N_H-bdbvTOlt8NuGZh8VEZkkL46XsSt541YM,47
+img2pdf-0.3.3.dist-info/top_level.txt,sha256=PiRzjOPvFQugh8YUgI05KMYRFx_r7cRwZ5757uo-mkQ,12
+img2pdf-0.3.3.dist-info/zip-safe,sha256=AbpHGcgLb-kRsJGnwFEktk7uzpZOCcBY74-YBdrKVGs,1
+img2pdf.py,sha256=o_nBitZ2NvMCNDG-s0KnIu5F6nGUr9xPWM2uOkuI390,92492
+jp2.py,sha256=0ivFeSa0EknRfSrApFSOmu8POSfWVn95YoOCDG8MOzg,4493
