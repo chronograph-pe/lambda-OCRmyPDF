@@ -64,7 +64,7 @@ The following test configuration can be added to lambda to test the functionalit
 ```json
 {
   "pages": "1",
-  "awsRegion": "us-east-1",
+  "awsRegion": "[YOUR AWS REGION HERE]",
   "s3": {
     "bucket": {
       "name": "[YOUR BUCKET NAME HERE]"
