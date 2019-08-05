@@ -15,7 +15,7 @@ The purpose of this application was to adapt the **OCRmyPDF** application/librar
 
 ## What's in the repo?
 
-This repository contains all external libraries required by OCRmyPDF compiled on and extracted from an Amazon Linux EC2 instance.  It also contains all python packages compiled on and extracted from an Amazon Linux EC2 instance.  Lastly, it features some minor changes to the OCRmyPDF source itself to make it Lambda friendly.  The resulting zip file is around `261,459,415` bytes
+This repository contains all external libraries required by OCRmyPDF compiled on and extracted from an Amazon Linux EC2 instance.  It also contains all python packages compiled on and extracted from an Amazon Linux EC2 instance.  Lastly, it features some minor changes to the OCRmyPDF source itself to make it Lambda friendly.  The resulting zipfile extracts to around `261,459,415` bytes, which comes just under the `262,144,000` byte limit set by AWS.
 
 ## Calling the Event
 
