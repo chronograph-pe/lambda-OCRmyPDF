@@ -22,6 +22,7 @@ import os
 import signal
 import sys
 import threading
+from multiprocessing import Process, Pipe
 from collections import namedtuple
 from tempfile import mkdtemp
 
@@ -79,12 +80,18 @@ def preprocess(page_context, image, remove_background, deskew, clean):
     return image
 
 
+def exec_page_async(page_context, conn):
+    result = exec_page_sync(page_context)
+    conn.send([result])
+    conn.close
+
 def exec_page_sync(page_context):
     options = page_context.options
     orientation_correction = 0
     pdf_page_from_image_out = None
     ocr_out = None
     text_out = None
+    print("Doing page " + str(page_context.pageno))
     if is_ocr_required(page_context):
         if options.rotate_pages:
             # Rasterize
@@ -250,7 +257,7 @@ def exec_concurrent(context):
     sidecars = [None] * len(context.pdfinfo)
     ocrgraft = OcrGrafter(context)
 
-    log_queue = multiprocessing.Pipe(-1)
+    log_queue = multiprocessing.Queue(-1)
     listener = threading.Thread(target=log_listener, args=(log_queue,))
     listener.start()
     with tqdm(
@@ -295,6 +302,47 @@ def exec_concurrent(context):
 
     # Copy PDF file to destination
     copy_final(pdf, context.options.output_file, context)
+
+def exec_lambda_friendly_multi(context):
+    sidecars = [None] * len(context.pdfinfo)
+    ocrgraft = OcrGrafter(context)
+
+    pc = context.get_page_contexts()
+
+    processes = []
+    parent_connections = []
+
+    for page_contexts in pc:
+        parent_conn, child_conn = Pipe()
+        parent_connections.append(parent_conn)
+        process = Process(target=exec_page_async, args=(page_contexts,child_conn,))
+        processes.append(process)
+
+    for process in processes:
+        process.start()
+    
+    for process in processes:
+        process.join()
+
+    for parent_connection in parent_connections:
+        page_result = parent_connection.recv()[0]
+        sidecars[page_result.pageno] = page_result.text
+        ocrgraft.graft_page(page_result)
+
+    # Output sidecar text
+    if context.options.sidecar:
+        text = merge_sidecars(sidecars, context)
+        # Copy text file to destination
+        copy_final(text, context.options.sidecar, context)
+
+    # Merge layers to one single pdf
+    pdf = ocrgraft.finalize()
+
+    # PDF/A and metadata
+    pdf = post_process(pdf, context)
+    # Copy PDF file to destination
+    copy_final(pdf, context.options.output_file, context)
+
 
 def exec_single_threaded(context):
     sidecars = [None] * len(context.pdfinfo)
@@ -361,7 +409,7 @@ def run_pipeline(options, api=False):
         # Execute the pipeline
         if options.single_threaded:
             print("Executing in single threaded mode")
-            exec_single_threaded(context)
+            exec_lambda_friendly_multi(context)
         else:
             exec_concurrent(context)
 
