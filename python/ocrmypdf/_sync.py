@@ -315,6 +315,7 @@ def exec_lambda_friendly_multi(context):
     pc = context.get_page_contexts()
 
     chunks = list(divide_chunks(list(pc), 4))
+    results = []
     for chunk in chunks:
         processes = []
         parent_connections = []
@@ -322,6 +323,7 @@ def exec_lambda_friendly_multi(context):
             parent_conn, child_conn = Pipe()
             parent_connections.append(parent_conn)
             process = Process(target=exec_page_async, args=(page_contexts,child_conn,))
+            process.daemon=True
             processes.append(process)
 
         for process in processes:
@@ -329,12 +331,21 @@ def exec_lambda_friendly_multi(context):
         
         for process in processes:
             process.join()
+            if process.is_alive():
+                print("Still running... Aborting tree construction.")
+                # Terminate
+                process.terminate()
+                process.join()
 
         for parent_connection in parent_connections:
             page_result = parent_connection.recv()[0]
-            sidecars[page_result.pageno] = page_result.text
-            ocrgraft.graft_page(page_result)
+            results.append(page_result)
 
+    print("Done chunks")
+
+    for page_result in results:
+        sidecars[page_result.pageno] = page_result.text
+        ocrgraft.graft_page(page_result)
 
     # Output sidecar text
     if context.options.sidecar:
