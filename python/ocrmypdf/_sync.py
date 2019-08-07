@@ -303,31 +303,38 @@ def exec_concurrent(context):
     # Copy PDF file to destination
     copy_final(pdf, context.options.output_file, context)
 
+def divide_chunks(l, n): 
+    for i in range(0, len(l), n):  
+        yield l[i:i + n] 
+
+
 def exec_lambda_friendly_multi(context):
     sidecars = [None] * len(context.pdfinfo)
     ocrgraft = OcrGrafter(context)
 
     pc = context.get_page_contexts()
 
-    processes = []
-    parent_connections = []
+    chunks = list(divide_chunks(list(pc), 4))
+    for chunk in chunks:
+        processes = []
+        parent_connections = []
+        for page_contexts in chunk:
+            parent_conn, child_conn = Pipe()
+            parent_connections.append(parent_conn)
+            process = Process(target=exec_page_async, args=(page_contexts,child_conn,))
+            processes.append(process)
 
-    for page_contexts in pc:
-        parent_conn, child_conn = Pipe()
-        parent_connections.append(parent_conn)
-        process = Process(target=exec_page_async, args=(page_contexts,child_conn,))
-        processes.append(process)
+        for process in processes:
+            process.start()
+        
+        for process in processes:
+            process.join()
 
-    for process in processes:
-        process.start()
-    
-    for process in processes:
-        process.join()
+        for parent_connection in parent_connections:
+            page_result = parent_connection.recv()[0]
+            sidecars[page_result.pageno] = page_result.text
+            ocrgraft.graft_page(page_result)
 
-    for parent_connection in parent_connections:
-        page_result = parent_connection.recv()[0]
-        sidecars[page_result.pageno] = page_result.text
-        ocrgraft.graft_page(page_result)
 
     # Output sidecar text
     if context.options.sidecar:
