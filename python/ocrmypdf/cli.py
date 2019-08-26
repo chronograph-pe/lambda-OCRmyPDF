@@ -307,9 +307,9 @@ ocrsettings.add_argument(
     "but include skipped pages in final output",
 )
 ocrsettings.add_argument(
-    '--single-threaded',
+    '--lambda-safe',
     action='store_true',
-    help="Limit operation to a single thread, for Lambda use for example",
+    help="Limit operation to use lambda safe multi-threading",
 )
 optimizing = parser.add_argument_group(
     "Optimization options", "Control how the PDF is optimized after OCR"
