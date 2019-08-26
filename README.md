@@ -35,6 +35,8 @@ The event currently supports only a few, basic, parameters, which we intend on e
 
 Download the [latest release](https://github.com/chronograph-pe/lambda-OCRmyPDF/releases) from this repository's releases page.
 
+[Optional]: You can also download the source here and compress it to your own .zip file.  However you may need to update the permissions of the files within the /bin and /lib folders, as discovered in [this issue](https://github.com/chronograph-pe/lambda-OCRmyPDF/issues/2).
+
 ### Create the Function
 
 - Go to S3 and upload the downloaded zip file to an S3 bucket of your choosing.  Keep track of the url of the file for later.
