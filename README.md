@@ -27,6 +27,7 @@ The event currently supports only a few, basic, parameters, which we intend on e
 | s3.bucket.name | The name of the S3 bucket |
 | s3.object.key | The key for the object in the S3 bucket |
 | pages | The pages parameter for OCRmyPDF.  Ex: "1", "3-5", "1,3-5,8" |
+| doBackup | Creates a mirror of the S3 object appended with `.bak` |
 
 
 ## Installation
@@ -77,8 +78,6 @@ The following test configuration can be added to lambda to test the functionalit
 ```
 
 # To Do:
-- Make backup creation configurable in the lambda action
 - Add instructions for `aws-cli`
 - Add additional language support
 - Continue to trim down python packages
-- Reimplement multithreading in a way that would work as a Amazon Lambda function
