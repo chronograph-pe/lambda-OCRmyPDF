@@ -27,7 +27,7 @@ def apply_ocr_to_document_handler(event, context):
                 inputname = '/tmp/input' + uuidstr + '.pdf'
                 outputname = '/tmp/output' + uuidstr + '.pdf'
                 s3.download_file(Bucket=bucket, Key=key, Filename=inputname)
-                ocrmypdf.ocr(inputname, outputname, pages=pages, force_ocr=True, single_threaded=True)
+                ocrmypdf.ocr(inputname, outputname, pages=pages, force_ocr=True, lambda_safe=True)
                 if do_backup:
                     s3.upload_file(inputname, bucket, key + '.bak')
                 s3.upload_file(outputname, bucket, key)

@@ -425,8 +425,8 @@ def run_pipeline(options, api=False):
         validate_pdfinfo_options(context)
 
         # Execute the pipeline
-        if options.single_threaded:
-            print("Executing in single threaded mode")
+        if options.lambda_safe:
+            print("Executing in lambda threaded mode")
             exec_lambda_friendly_multi(context)
         else:
             exec_concurrent(context)
