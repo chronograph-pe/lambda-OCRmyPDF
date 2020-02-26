@@ -48,16 +48,45 @@ Download the [latest release](https://github.com/chronograph-pe/lambda-OCRmyPDF/
 
 ### Setup the Function
 
+#### manually
+
 - Under the Function code section:
     - Set the **Code entry type** field to `Upload a file from Amazon S3`
     - Set the **Runtime** field to `Python 3.6`
     - Set the handler field to `apply-ocr-to-s3-object.apply_ocr_to_document_handler`
     - Copy and paste the S3 object URL from above into the **Amazon S3 link URL** field
+    - Increase the timeout to max (900 sec)
+    - Set memory size to your desired size
+     - Required for OCRmyPDF is ~256MB. lambda max is 3008MB
+     - Denote - incresing the memory size may reduce the runtime drastically and increases the lambda per-time cose see [aws pricing](https://aws.amazon.com/lambda/pricing/)
 - Under the Environment Variables section:
     - Set the below environment variables to their respective paths
     - **PATH** : `/var/task/bin`
     - **PYTHONPATH** : `/var/task/python`
     - **TESSDATA_PREFIX** : `/var/task/tessdata`
+    
+#### Or by script
+
+```bash
+
+lambda_name="your_lambda_name"
+s3_bucket="your_bucket"
+s3_file_key="your_s3_file_key.zip"
+
+zip_file_name="lambda-ocrtopdf.zip"
+download_url="https://github.com/chronograph-pe/lambda-OCRmyPDF/releases/download/v1.0-alpha/lambda-ocrtopdf.zip"
+
+wget -O $zip_file_name -L $download_url
+
+aws s3 cp  $zip_file_name s3://$s3_bucket/$s3_file_key
+aws lambda update-function-code --function-name $lambda_name --s3-bucket $s3_bucket --s3-key $s3_file_key
+aws lambda update-function-configuration --function-name $lambda_name \
+                                        --handler apply-ocr-to-s3-object.apply_ocr_to_document_handler \
+                                        --environment "Variables={PATH=/var/task/bin,PYTHONPATH=/var/task/python,TESSDATA_PREFIX=/var/task/tessdata}" \
+                                        --timeout 900 \
+                                        --memory-size 3008 \
+                                        --runtime "python3.6"
+```
 
 ### Test the Function
 
@@ -80,6 +109,5 @@ The following test configuration can be added to lambda to test the functionalit
 ```
 
 # To Do:
-- Add instructions for `aws-cli`
 - Add additional language support
 - Continue to trim down python packages
