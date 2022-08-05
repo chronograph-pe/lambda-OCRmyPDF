@@ -5,6 +5,7 @@ import urllib.parse
 import boto3
 import ocrmypdf
 import uuid
+import pdf2image
 
 print('Loading function')
 
@@ -27,7 +28,18 @@ def apply_ocr_to_document_handler(event, context):
                 inputname = '/tmp/input' + uuidstr + '.pdf'
                 outputname = '/tmp/output' + uuidstr + '.pdf'
                 s3.download_file(Bucket=bucket, Key=key, Filename=inputname)
-                ocrmypdf.ocr(inputname, outputname, pages=pages, force_ocr=True, lambda_safe=True)
+                try:
+                    ocrmypdf.ocr(inputname, outputname, pages=pages, force_ocr=True)
+                except ocrmypdf.exceptions.EncryptedPdfError as epe:
+                    print('PDF is encrypted. Attempting to rasterize images and retry.')
+                    images = pdf2image.convert_from_path(inputname)
+                    _inputname = inputname.replace('input', '_input')
+                    if len(images) > 1:
+                        images[0].save(_inputname, save_all=True, append_images=images[1:])
+                    else:
+                        images[0].save(_inputname)
+                    ocrmypdf.ocr(_inputname, outputname, pages=pages, force_ocr=True)
+
                 if do_backup:
                     s3.upload_file(inputname, bucket, key + '.bak')
                 s3.upload_file(outputname, bucket, key)
