@@ -39,6 +39,7 @@ def apply_ocr_to_document_handler(event, context):
                     else:
                         images[0].save(_inputname)
                     ocrmypdf.ocr(_inputname, outputname, pages=pages, force_ocr=True)
+                    os.remove(_inputname)
 
                 if do_backup:
                     s3.upload_file(inputname, bucket, key + '.bak')
